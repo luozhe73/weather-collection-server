@@ -1,7 +1,9 @@
 package com.cloud.weather.job;
 
+import com.cloud.weather.service.CityClient;
 import com.cloud.weather.service.WeatherDataCollectionService;
 import com.cloud.weather.vo.City;
+import com.netflix.discovery.converters.Auto;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -19,6 +21,9 @@ public class WeatherDataSyncJob extends QuartzJobBean {
     @Autowired
     private WeatherDataCollectionService weatherDataCollectionService;
 
+    @Autowired
+    private CityClient cityClient;
+
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
@@ -29,8 +34,7 @@ public class WeatherDataSyncJob extends QuartzJobBean {
         List<City> cityList = null;
 
         try {
-            //TODO改为城市数据微服务来获取城市数据
-            cityList = new ArrayList<>();
+            cityList = cityClient.listCity();
         } catch (Exception e) {
             e.printStackTrace();
         }
