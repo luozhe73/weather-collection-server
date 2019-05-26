@@ -1,9 +1,8 @@
 package com.cloud.weather.job;
 
-import com.cloud.weather.service.CityClient;
+import com.cloud.weather.service.DataClient;
 import com.cloud.weather.service.WeatherDataCollectionService;
 import com.cloud.weather.vo.City;
-import com.netflix.discovery.converters.Auto;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherDataSyncJob extends QuartzJobBean {
@@ -22,7 +20,7 @@ public class WeatherDataSyncJob extends QuartzJobBean {
     private WeatherDataCollectionService weatherDataCollectionService;
 
     @Autowired
-    private CityClient cityClient;
+    private DataClient dataClient;
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -34,7 +32,7 @@ public class WeatherDataSyncJob extends QuartzJobBean {
         List<City> cityList = null;
 
         try {
-            cityList = cityClient.listCity();
+            cityList = dataClient.listCity();
         } catch (Exception e) {
             e.printStackTrace();
         }
